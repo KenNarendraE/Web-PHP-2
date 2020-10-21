@@ -3,6 +3,7 @@
     if (isset($_GET['hapus'])) {
         $id = $_GET['hapus'];
         unset($_SESSION['_'.$id]);
+        header("location:?f=home&m=beli");
     }
 
     if (isset($_GET['tambah'])) {
@@ -43,6 +44,8 @@
 
         $total = 0;
 
+        global $total;
+
         echo '<table class="table table-bordered w-70">
         
             <tr>
@@ -54,7 +57,7 @@
             </tr>     
         ';
         foreach ($_SESSION as $key => $value) {
-            if ($key<>'pelanggan' && $key<>'idpelanggan') {
+            if (($key<>'pelanggan' && $key<>'idpelanggan' && $key<>'user' && $key<>'level' && $key<>'iduser')) {
                 $id = substr($key,1);
 
                 $sql = "SELECT * FROM tblmenu WHERE idmenu=$id";
@@ -75,10 +78,19 @@
         }
 
         echo '<tr>
-        <td colspan=4>Grand Total</td>
+        <td colspan=4><h3>Grand Total</h3></td>
         <td><h3>'.$total.'</h3></td>
         
         </tr>';
         echo '</table>';
     }
+
+?>
+
+<?php if (!empty($total)) {
+    
+?>
+<a class="btn btn-primary" href="?f=home&m=checkout&total=<?php echo $total ?>" role="button">Check Out</a>
+<?php 
+}
 ?>
